@@ -9,7 +9,6 @@
     <!-- Preconnect to Google Domains -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link rel="preconnect" href="https://www.google-analytics.com">
     
     <!-- Async Font Loading -->
     <link rel="preload" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@800&display=swap" as="style" onload="this.onload=null;this.rel='stylesheet'">
@@ -26,15 +25,34 @@
         <h1>Green</h1>
     </main>
     
-    <!-- Google Analytics (GA4) with Lazy Loading -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-1CEH6G77YV"></script>
     <script>
-        window.addEventListener('load', function() {
+        // Analytics ID
+        const GA_ID = 'G-1CEH6G77YV';
+
+        // Function to inject GA4
+        function loadGA() {
+            // Add the gtag script to the document head
+            const script = document.createElement('script');
+            script.src = `https://www.googletagmanager.com/gtag/js?id=${GA_ID}`;
+            script.async = true;
+            document.head.appendChild(script);
+
+            // Configure GA
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
             gtag('js', new Date());
-            gtag('config', 'G-1CEH6G77YV');
-        });
+            gtag('config', GA_ID);
+
+            // Cleanup: remove listeners so it only runs once
+            window.removeEventListener('mousemove', loadGA);
+            window.removeEventListener('touchstart', loadGA);
+            window.removeEventListener('scroll', loadGA);
+        }
+
+        // Trigger on interaction
+        window.addEventListener('mousemove', loadGA, { once: true });
+        window.addEventListener('touchstart', loadGA, { once: true });
+        window.addEventListener('scroll', loadGA, { once: true });
     </script>
 </body>
 </html>
